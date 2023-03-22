@@ -6,8 +6,9 @@ def plot(data):
     have_aces = [0,1]
     extent = [12, 22, 1, 11]
     for title, have_aces, axis in zip(titles, have_aces, axes):
-        dat = data[extent[0]:extent[1], extent[2]:extent[3], have_ace].T
+        dat = data[extent[0]:extent[1], extent[2]:extent[3], have_aces].T
         axis.imshow(dat, extent=extent, origin='lower')
         axis.set_xlabel('player sum')
         axis.set_ylabel('dealer showing')
         axis.set_title(title)
+    plt.show()
