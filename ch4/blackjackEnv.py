@@ -31,7 +31,7 @@ class BlackjackEnv():
     def __init__(self):
         self.action_space = spaces.Discrete(2)   # 玩家要牌， 玩家不要牌
         self.observation_space = spaces.Tuple((  # （玩家的点数和，庄家可见牌的点数和，是否将A牌算为11）
-            spaces.Discrete(32),
+            spaces.Discrete(32),   # 不懂这个32是什么意思
             spaces.Discrete(11),
             spaces.Discrete(2)))
         self.seed()
@@ -48,26 +48,26 @@ class BlackjackEnv():
                 done = True
                 reward = -1.
                 info = 'Player bust'
-            else: # 没有bust则继续
+            else:  # 没有bust则继续
                 done = False
                 reward = 0.
                 info = 'Keep going'
         else:  # 停牌
             while sum_hand(self.dealer) < 17:  # 庄家小于17则继续叫牌
                 self.dealer.append(draw_card(self.np_random))
-                if is_bust(self.dealer):  # 如果bust
-                    reward = 1
-                    info = 'Dealer bust'
+            if is_bust(self.dealer):  # 如果bust
+                reward = 1
+                info = 'Dealer bust'
+            else:
+                reward = np.sign(
+                    sum_hand(self.player)-sum_hand(self.dealer))
+                if reward == 1:         # player的牌大于dealer的牌
+                    info = 'Player win'
+                elif reward == -1:      # dealer的牌大于player的牌，则player继续抽牌
+                    info = 'Drawing'
                 else:
-                    reward = np.sign(
-                        sum_hand(self.player)-sum_hand(self.dealer))
-                    if reward == 1:
-                        info = 'Player win'
-                    elif reward == 1:
-                        info = 'Drawing'
-                    else:
-                        info = 'Dealer win'
-                done = True
+                    info = 'Dealer win'
+            done = True
         return self._get_obs(), reward, done, info
 
     def _get_obs(self):
