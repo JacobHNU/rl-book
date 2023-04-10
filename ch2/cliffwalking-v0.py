@@ -32,7 +32,7 @@ def play_once(env, policy):
 
 # 最优策略
 actions = np.ones(env.shape, dtype=int)
-actions[-1, :] = 0      # a[-1, :] ## 取最后一个元素里面的全部内容
+actions[-1, :] = 0      # a[-1, :] ## 取最后一个行里面的全部内容
 actions[:, -1] = 2      # a[:,-1]  ## 取所有元素里面的的最后一个
 print('actions.reshape(-1)={}'.format(actions.reshape(-1)))
 optimal_policy = np.eye(4)[actions.reshape(-1)]  # np.eye(4)[actions.reshape(-1)]形成one-hot编码  # reshape(-1) 将数组变为1行

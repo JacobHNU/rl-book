@@ -40,7 +40,7 @@ print(transition_p)
 ## 一开始随机策略下到下一个状态的概率都是相等的
 
 ######## 随机策略
-def play_policy(env, policy, render=False):
+def play_policy(env, policy, render=True):
     total_reward = 0.
     observation = env.reset()
     while True:
@@ -58,7 +58,7 @@ def play_policy(env, policy, render=False):
 random_policy = \
     np.ones((env.observation_space.n, env.action_space.n)) / env.action_space.n
 # print("随机策略:{}".format(random_policy))
-episode_rewards = [play_policy(env, random_policy) for _ in range(100)]
+episode_rewards = [play_policy(env, random_policy) for _ in range(1000)]
 print("随机策略 平均奖励: {}".format(np.mean(episode_rewards)))
 
 
