@@ -7,9 +7,14 @@
 ## 策略评估迭代中，迭代算法利用Bellman期望方程迭代求解给定策略的价值函数；
 ## 价值迭代中，利用Bellman最优方程迭代求解最优策略的价值函数，进而求得最优策略。
 
+## 起始探索的实现方法
+# 1. 为每一个状态-动作对设置相同的初始出现概率
+# 2. 循环所有状态-动作对   √
+# 3. 规定状态-动作对初始出现次数
+
 from collections import defaultdict
 import numpy as np
-import matplotlib.pyplot as plt
+import plot_func as plt
 import blackjackEnv
 
 class StartExplore_EveryVisit_ValueIter_MCRL():
@@ -78,44 +83,13 @@ class StartExplore_EveryVisit_ValueIter_MCRL():
 
         return opt_policy, opt_Q
 
-    # 绘制最优策略图像
-    def draw(self, policy):
-        true_hit = [(x[1], x[0]) for x in policy.keys(
-        ) if x[2] == True and policy[x] == 1]
-        true_stick = [(x[1], x[0]) for x in policy.keys(
-        ) if x[2] == True and policy[x] == 0]
-        false_hit = [(x[1], x[0]) for x in policy.keys(
-        ) if x[2] == False and policy[x] == 1]
-        false_stick = [(x[1], x[0]) for x in policy.keys(
-        ) if x[2] == False and policy[x] == 0]
-
-        plt.figure(1)
-        plt.plot([x[0] for x in true_hit],
-                 [x[1] for x in true_hit], 'bo', label='HIT')
-        plt.plot([x[0] for x in true_stick],
-                 [x[1] for x in true_stick], 'rx', label='STICK')
-        plt.xlabel('dealer'), plt.ylabel('player')
-        plt.legend(loc='upper right')
-        plt.title('Usable Ace')
-        filepath = 'code3-5 UsabelAce.png'
-        plt.savefig(filepath, dpi=300)
-
-        plt.figure(2)
-        plt.plot([x[0] for x in false_hit],
-                 [x[1] for x in false_hit], 'bo', label='HIT')
-        plt.plot([x[0] for x in false_stick],
-                 [x[1] for x in false_stick], 'rx', label='STICK')
-        plt.xlabel('dealer'), plt.ylabel('player')
-        plt.legend(loc='upper right')
-        plt.title('No Usable Ace')
-        filepath = 'code3-5 NoUsabelAce.png'
-        plt.savefig(filepath, dpi=300)
 
 if __name__=='__main__':
     env = blackjackEnv.BlackjackEnv()   # 导入环境模型
     env.gamma = 1.0                     # 定义折扣系数
+    filepath = "./img/"
     agent = StartExplore_EveryVisit_ValueIter_MCRL(env, num_episodes=100000)
     opt_policy, opt_Q = agent.mcrl()
     for key in opt_policy.keys():
         print(key, ":", opt_policy[key], opt_Q[key])
-    agent.draw(opt_policy)
+    plt.draw(opt_policy, filepath)
