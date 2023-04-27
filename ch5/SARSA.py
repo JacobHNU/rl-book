@@ -42,7 +42,7 @@ def epsilon_greedy_Policy(env, Q, epsilon=0.1):
 def SARSA(env, num_episodes=500, alpha=0.1, epsilon=0.1):
     nA = env.aspace_size
     episodes_reward = []
-    episode_reward = 0.
+
     # 初始化
     Q = defaultdict(lambda: np.zeros(nA))  # 动作值
     egreedy_policy = epsilon_greedy_Policy(env, Q, epsilon)  # 贪婪策略函数
@@ -50,11 +50,12 @@ def SARSA(env, num_episodes=500, alpha=0.1, epsilon=0.1):
     # 外层循环
     for _ in range(num_episodes):
         state = env.reset()  # 初始化状态
-        action_prob = egreedy_policy(state)  # 用贪婪策略选择动作
-        action = np.random.choice(np.arange(nA), p=action_prob)
-
+        episode_reward = 0.
         # 内层循环
         while True:
+            # 用贪婪策略选择动作
+            action_prob = egreedy_policy(state)
+            action = np.random.choice(np.arange(nA), p=action_prob)
             # 采样
             next_state, reward, done, info = env.step(action)  # 采样，交互一步
             episode_reward += reward
@@ -69,7 +70,6 @@ def SARSA(env, num_episodes=500, alpha=0.1, epsilon=0.1):
                 break
 
             state = next_state
-            action = next_action
         episodes_reward.append(episode_reward)
     # 用表格表示最终策略
     P_table = np.ones((env.world_height, env.world_width)) * np.inf
@@ -87,7 +87,7 @@ if __name__ == "__main__":
     env = WindyWorld.WindyWorldEnv()
     num_episodes = 1000
     # 调用sarsa
-    P_table, Q, episodes_reward = SARSA(env, num_episodes, alpha=0.1, epsilon=0.08)
+    P_table, Q, episodes_reward = SARSA(env, num_episodes, alpha=0.1, epsilon=0.1)
 
     # 输出
     print('p=', P_table)
