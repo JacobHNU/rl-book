@@ -1,3 +1,12 @@
+'''
+涉及到资格迹，对资格迹不太了解，涉及到信度分配。简要介绍一下sarsa(λ)和sarsa的区别：
+  sarsa是每次获取到reward之后只更新到reward的前一步，而sarsa(λ)是更新获取到reward的前λ步，
+  即是sarsa在没有获得reward之前，当前步的Q值其实是没有任何变化的，直到获得reward之后才会更新前一步；
+  而sarsa(λ)则会对获得reward的所有步都进行更新，离reward越近的步越重要，越远的步则越不重要（由λ控制衰减幅度）。
+  λ是在[0,1]之间取值，如果λ=0，sarsa(λ)就是sarsa，只更新获取到reward前一步
+  λ=1，sarsa(λ)就是回合更新，更新的是获取到reward前所有经历过的步。
+'''
+
 import numpy as np
 from collections import defaultdict
 import matplotlib.pyplot as plt
