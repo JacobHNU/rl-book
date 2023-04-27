@@ -7,6 +7,7 @@
     当n = 1 时， 则为单步时序差分  G(s_t, a_t) = R_t+1 + gamma* Q(s_t+1, a_t+1)
     当n = T时， 则为蒙特卡洛法（整个回合的抽样） G(s_t, a_t) = R_t+1 + gamma*R_t+2 + ... + gamma^T* Q(s_T, a)    Q(s_T, a)恒等于0
 
+    一般来说，3-10步左右效果更好，实验结果也表明，本次实验n=3和6 好于 n=1和n=10
 '''
 
 # n步时序差分策略评估算法
@@ -185,13 +186,15 @@ if __name__ == '__main__':
     import WindyWorld
     env = WindyWorld.WindyWorldEnv()
 
-    nstep_list = [1,3]
+    nstep_list = [1,3,6,10]
     episodes_reward_rec = [[] for i in range(len(nstep_list))]
 
     for nstpe_idx, nstep in enumerate(nstep_list):
         P_table, Q, episodes_rewards = nstep_sarsa(env,nstep,num_episodes=1000, alpha=0.1, epsilon=0.1)
         episodes_reward_rec[nstpe_idx] = episodes_rewards
-        print('P{}={}'.format(nstep_list[nstpe_idx],P_table))
+        print('平均回合奖励 = {} / {} = {}'.format(sum(episodes_rewards),
+                                             len(episodes_rewards), np.mean(episodes_rewards)))
+        # print('P{}={}'.format(nstep_list[nstpe_idx],P_table))
         # for state in env.get_sspace():
         #     print(state, Q[state])
 
@@ -202,4 +205,7 @@ if __name__ == '__main__':
     plt.ylabel("Episodes_rewards")
     plt.legend()
     plt.show()
+
+
+
 
