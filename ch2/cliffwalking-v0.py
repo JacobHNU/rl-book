@@ -21,7 +21,7 @@ def play_once(env, policy):
     while True:
         loc = np.unravel_index(state, env.shape)
         # print('状态={}, 位置={}'.format(state, loc), end=' ')
-        action = np.random.choice(env.nA, p=policy[state])
+        action = np.random.choice(env.nA, p=policy[state])   # p实际是个数组，大小（size）应该与指定的env.nA相同，用来规定选取a中每个元素的概率
         next_state, reward, done, _= env.step(action)
         # print('动作={}, 奖励={}'.format(action, reward))
         total_reward += reward
