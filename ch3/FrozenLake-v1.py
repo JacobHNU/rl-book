@@ -46,7 +46,7 @@ def play_policy(env, policy, render=True):
     while True:
         if render:
             env.render()  # 显示环境
-        action = np.random.choice(env.action_space.n, p=policy[observation])
+        action = np.random.choice(env.action_space.n, p=policy[observation])  # p实际是个数组，大小（size）应该与指定的env.action_space.n相同，用来规定选取a中每个元素的概率
         observation, reward, done, _ = env.step(action)
         total_reward += reward  # 统计回合奖励
         if done:  # 游戏结束
