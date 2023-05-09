@@ -40,7 +40,7 @@ class SoftExplore_EveryVisit_ValueIter_MCRL:
         # 贪婪策略
         self.greedy_policy[state] = action
         # 对应的epsilon贪婪策略
-        self.eg_policy[state] = np.ones(self.nA) * self.epsilon / self.nA
+        self.eg_policy[state] = np.ones(self.nA) * self.epsilon / self.nA   #
         self.eg_policy[state][action] += 1 - self.epsilon
 
         return self.greedy_policy[state], self.eg_policy[state]
