@@ -99,13 +99,17 @@ import torch.nn as nn
 Bath_size = 10  # batch size
 linear_layer = nn.Linear(20, 30)  # 创建线性层实例 得到A.size() = [30,20]
 x = torch.randn(Bath_size,20)  # 输入批量数据，单个输入维度为20,
+print(x.size(), x.dtype)
+'''
+torch.Size([10, 20]) torch.float32
+'''
 y = linear_layer(x)            # 线性层映射，输出y   具体计算时这里需要转置 [10, 20] x [20, 30]
 # print(y.size(), y.dtype)
 '''
 torch.Size([10, 30]) torch.float32
 '''
 
-dir(linear_layer)           # 查询linear_layer的所有属性和功能函数名    此方法无效
+# dir(linear_layer)           # 查询linear_layer的所有属性和功能函数名    此方法无效
 # print(linear_layer.weight, linear_layer.weight.size())  # 查询权重、
 '''
 得到 torch.Size([30, 20])
@@ -202,6 +206,7 @@ tensor([[-0.1793, -0.1767, -0.0958,  0.0812, -0.0280, -0.0209,  0.0979,  0.2202,
 '''
 # print(linear_layer.bias, linear_layer.bias.size())    # 查询偏置
 '''
+torch.Size([30]
 tensor([-0.1392, -0.1017,  0.0167,  0.1606, -0.1104,  0.1360, -0.1090,  0.1581,
          0.1155,  0.1902, -0.0429,  0.1251,  0.1502,  0.1383,  0.2170,  0.0815,
          0.0895, -0.1164,  0.1199, -0.2121, -0.1550,  0.0336, -0.0232, -0.0879,
@@ -228,16 +233,17 @@ y_tar = torch.randn((B,5))                # 目标输出
 out = loss(y_hat, y_tar)                  # 损失函数值
 out_sum = loss_sum(y_hat, y_tar)
 out_none = loss_none(y_hat, y_tar)
-print(out,out.shape)
+# print(out,out.shape)
 '''
 tensor(2.7946) torch.Size([])
 '''
-print(out_sum,out_sum.shape)
+# print(out_sum,out_sum.shape)
 '''
 tensor(139.7309) torch.Size([])
 '''
-print(out_none,out_none.shape)
+# print(out_none,out_none.shape)
 '''
+ torch.Size([10, 5]
 tensor([[5.4936e-01, 3.8682e-04, 8.0346e-01, 6.8689e+00, 8.8456e-02],
         [3.1645e-01, 8.4444e+00, 1.1041e+01, 7.0309e+00, 4.7544e+00],
         [9.1176e+00, 4.9526e+00, 3.2462e-01, 7.3276e-01, 8.2600e+00],
