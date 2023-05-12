@@ -1,5 +1,5 @@
 '''
-下载速度很慢时的处理方法：
+下载速度很慢时的处理方法：(前提是已经有data/FashionMNIST/raw文件夹了)
 1. 直接下载文件
 train-data:  http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/train-images-idx3-ubyte.gz
 train-labels:  http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/train-labels-idx1-ubyte.gz
@@ -31,7 +31,7 @@ test_data = datasets.FashionMNIST(
     train=False,
     download=True,
     transform=ToTensor()   # 制定特征features和标签labels的数据格式转换，
-    # 将(H, W, C)的nump.ndarray或img转为shape为(C, H, W)，
+    # 将(H, W, C)的nump.ndarray或img转为shape为(C, H, W)，转为tensor张量
 )
 '''
 
