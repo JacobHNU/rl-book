@@ -4,7 +4,7 @@ DQN的改进算法
 '''
 '''
 源代码存在问题：
-    1. target_Q_network 无法进行更新，导致dqn学习的目标一直未能更新。
+    1. target_Q_network 无法进行更新，导致dqn学习的目标一直未能更新。 解决
         具体原因是：在训练初期，每个episode内的step是很难达到100步，导致target_Q_network无法更新，使用的仍然是初始的Q_network的参数。
                  target_Q_network无法更新优化，产生的目标Q值是差的，动作的效果也是差的，而Q_network一直学习的目标Q值就是target_Q_network产生的。
         修改方法：让step_counter成为全局变量，每个episode产生的step都累计，然后到达指定的100step就更新target_Q_network，这个样目标Q值就也在不断优化。
