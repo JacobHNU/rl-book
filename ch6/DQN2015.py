@@ -8,6 +8,7 @@ DQN的改进算法
                  target_Q_network无法更新优化，产生的目标Q值是差的，动作的效果也是差的，而Q_network一直学习的目标Q值就是target_Q_network产生的。
         修改方法：让step_counter成为全局变量，每个episode产生的step都累计，然后到达指定的100step就更新target_Q_network，这个样目标Q值就也在不断优化。
     2. 按照gym环境给的奖励函数，reward值最大只有200，限制了训练效果的进一步提升。
+       目前按照莫烦老师方法，在step完成后修改了cartpole的reward，然后再将修改后的存入经验回放池中，训练效果提升很明显
 
 
 '''
@@ -124,8 +125,8 @@ class DQN2015():
             if x[4]:          # 如果已经到达终止状态
                 y_batch.append(x[2])  # 记录一个mdp的reward
             else:            # 尚未达到终止状态
-                temp = torch.from_numpy(x[3]).unsqueeze(0).to(torch.float32)  # 将x[3]即next_state在行维度上增加一行，并转换为tensor
-                value_next = self.Q_network_t(temp)
+                next_state = torch.from_numpy(x[3]).unsqueeze(0).to(torch.float32)  # 将x[3]即next_state在行维度上增加一行，并转换为tensor
+                value_next = self.Q_network_t(next_state)
                 td_target = x[2]+self.env.gamma * torch.max(value_next)
                 y_batch.append(td_target.item())  # item()表示从td_target张量中取出该元素值
         y_batch = np.array(y_batch)
@@ -167,15 +168,15 @@ class DQN2015():
                 action = self.egreedy_action(state)  # epsilon-贪婪策略选定动作
                 next_state, reward, done, _ = self.env.step(action)  # 交互一个时间步
 
-                # modify the reward
-                x, x_dot, theta, theta_dot = next_state
-                r1 = (env.x_threshold - abs(x)) / env.x_threshold - 0.8
-                r2 = (env.theta_threshold_radians - abs(theta)) / env.theta_threshold_radians - 0.5
-                r = r1 + r2
+                # modify the reward  修改奖励确实能加速训练效果的提升
+                # x, x_dot, theta, theta_dot = next_state
+                # r1 = (env.x_threshold - abs(x)) / env.x_threshold - 0.8
+                # r2 = (env.theta_threshold_radians - abs(theta)) / env.theta_threshold_radians - 0.5
+                # r = r1 + r2
 
-                reward_sum += r     # 累积折扣奖励
+                reward_sum += reward     # 累积折扣奖励
 
-                self.perceive(state, action, r, next_state, done)  # 经验回放技术，训练
+                self.perceive(state, action, reward, next_state, done)  # 经验回放技术，训练
                 state = next_state       # 更新状态
                 if (self.learn_step_counter + 1) % self.target_replace_iter == 0:  # 目标Q网络参数更新
                     self.Q_network_t.load_state_dict(
