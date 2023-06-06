@@ -1,5 +1,7 @@
 '''
 DQN的改进算法
+    1. 经验回放
+    2. 目标网络
 '''
 '''
 源代码存在问题：
@@ -154,7 +156,7 @@ class DQN2015():
         self.optimizer.step()        # 误差反向传播修改参数
 
     # 训练函数
-    def train(self, num_episodes=400, num_steps=2000, render=False):
+    def train(self, num_episodes=200, num_steps=2000, render=False):
         # 外层循环指导最大轮次
         rewards = []                      # 每一回合的累积奖励
         for episode in range(num_episodes):
@@ -191,7 +193,7 @@ class DQN2015():
         plt.title('train')
         plt.plot(range(num_episodes), rewards, label='accumulate rewards')
         plt.legend()
-        filepath = 'train.png'
+        filepath = 'train2015.png'
         plt.savefig(filepath, dpi=300)
         plt.show()
 
@@ -224,7 +226,7 @@ class DQN2015():
         plt.title('test: score=' + str(score))
         plt.plot(range(num_episodes), rewards, label='accumulate rewards')
         plt.legend()
-        filepath = 'test.png'
+        filepath = 'test2015.png'
         plt.savefig(filepath, dpi=300)
         plt.show()
 
