@@ -235,6 +235,7 @@ class DQN2015():
 '''主程序'''
 if __name__ == '__main__':
     # 加载环境
+    # 加载环境
     env = gym.make('CartPole-v0')   # 导入CartPole环境
     env.gamma = 0.9                   # 折扣系数
     env.state_dim = env.observation_space.shape[0]  # 获取行维度

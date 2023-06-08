@@ -138,7 +138,7 @@ import torchvision.models as models
 model_vgg16 = models.vgg16(pretrained=True)  # 创建一个已经训练好的Vgg16网络
 torch.save(model_vgg16.state_dict(), 'model_vgg16_parameter')  # 保存模型参数
 
-model_vgg16_1 = models.vgg16()  # 创建一个未训练得vgg16网络
+model_vgg16_1 = models.vgg16()  # 创建一个未训练的vgg16网络
 model_vgg16_1.load_state_dict(torch.load('model_vgg16_parameter'))  # 加载模型参数
 
 model_vgg16.eval()  # 评估模型
