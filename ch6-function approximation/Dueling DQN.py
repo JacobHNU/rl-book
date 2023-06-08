@@ -1,5 +1,16 @@
 '''
-将动作价值函数分解为优势函数和
+   利用动作价值函数Q和状态价值函数V之差，得到优势函数A
+   然后为了使得Q=>V+A, V+A=>Q，采用优势函数A的导出量作为A_等效，即Q=V+A_等效,等式具有唯一值
+
+   在原DQN的基础上，
+   1. 分解原来的神经网络为公共部分，优势函数部分和状态价值网络部分；
+   2. forward前向传播时，计算Q=V+A_等效  = V + A - A.mean()
+   3. 在Q网络训练时，
+       3.1 利用当前Q网络得到的动作价值Q获取到最优动作a=argmax(Q),
+       3.2 利用目标Q网络得到的动作价值Q’
+       3.3 Q'_max = torch.dot(Q', a)获得目标Q网络的贪婪动作值
+       3.4 计算td_target时利用Q'_max, td_target = reward + gamma * Q’_max
+
 '''
 
 import gym
@@ -23,22 +34,22 @@ class NN(nn.Module):     #继承与torch的nn.module类
 
         # 公共网络
         self.public_stack = nn.Sequential(  #
-            nn.Linear(input_size, 50),     # 输入层到第1隐藏层的线性部分
+            nn.Linear(input_size, 20),     # 输入层到第1隐藏层的线性部分
             nn.ReLU(),                     # 第1隐藏层激活函数
-            nn.Linear(50, 50),             # 第1隐藏层到第2隐藏层的线性部分
+            nn.Linear(20, 20),             # 第1隐藏层到第2隐藏层的线性部分
             nn.ReLU(),                     # 第2隐藏层激活函数
-            nn.Linear(50, 50),              # 第2隐藏层到输出层
+            nn.Linear(20, 20),              # 第2隐藏层到输出层
             nn.ReLU()
             )
         # 优势网络部分
         self.advantage_stack = nn.Sequential(
-            nn.Linear(50,20),
+            nn.Linear(20,20),
             nn.ReLU(),
             nn.Linear(20,output_size)
             )
         # 状态价值网络
         self.stateValue_stack = nn.Sequential(
-            nn.Linear(50,20),
+            nn.Linear(20,20),
             nn.ReLU(),
             nn.Linear(20, 1)
             )
@@ -187,14 +198,14 @@ class DuelingDQN():
                 next_state, reward, done, _ = self.env.step(action)  # 交互一个时间步
 
                 # modify the reward  修改奖励确实能加速训练效果的提升
-                x, x_dot, theta, theta_dot = next_state
-                r1 = (env.x_threshold - abs(x)) / env.x_threshold - 0.8
-                r2 = (env.theta_threshold_radians - abs(theta)) / env.theta_threshold_radians - 0.5
-                r = r1 + r2
+                # x, x_dot, theta, theta_dot = next_state
+                # r1 = (env.x_threshold - abs(x)) / env.x_threshold - 0.8
+                # r2 = (env.theta_threshold_radians - abs(theta)) / env.theta_threshold_radians - 0.5
+                # r = r1 + r2
 
                 reward_sum += reward     # 累积折扣奖励
 
-                self.perceive(state, action, r, next_state, done)  # 经验回放技术，训练
+                self.perceive(state, action, reward, next_state, done)  # 经验回放技术，训练
                 state = next_state       # 更新状态
                 if (self.learn_step_counter + 1) % self.target_replace_iter == 0:  # 目标Q网络参数更新
                     self.Q_network_t.load_state_dict(
