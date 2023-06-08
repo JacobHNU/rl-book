@@ -204,11 +204,11 @@ class NN(nn.Module):  # 继承与torch的nn.module类
         self.flatten = nn.Flatten()  # 将输入拉直成向量
         # 定义Q网络
         self.linear_relu_stack = nn.Sequential(
-            nn.Linear(input_size, 50),  # 输入层到第1隐藏层的线性部分
+            nn.Linear(input_size, 20),  # 输入层到第1隐藏层的线性部分
             nn.ReLU(),  # 第1隐藏层激活函数
-            nn.Linear(50, 50),  # 第1隐藏层到第2隐藏层的线性部分
+            nn.Linear(20, 20),  # 第1隐藏层到第2隐藏层的线性部分
             nn.ReLU(),  # 第2隐藏层激活函数
-            nn.Linear(50, output_size)  # 第2隐藏层到输出层
+            nn.Linear(20, output_size)  # 第2隐藏层到输出层
         )
 
     def forward(self, x):  # 前向传播函数
@@ -350,14 +350,14 @@ class DqnWithPER():
                 next_state, reward, done, _ = self.env.step(action)  # 交互一个时间步
 
                 # modify the reward  修改奖励确实能加速训练效果的提升
-                x, x_dot, theta, theta_dot = next_state
-                r1 = (env.x_threshold - abs(x)) / env.x_threshold - 0.8
-                r2 = (env.theta_threshold_radians - abs(theta)) / env.theta_threshold_radians - 0.5
-                r = r1 + r2
+                # x, x_dot, theta, theta_dot = next_state
+                # r1 = (env.x_threshold - abs(x)) / env.x_threshold - 0.8
+                # r2 = (env.theta_threshold_radians - abs(theta)) / env.theta_threshold_radians - 0.5
+                # r = r1 + r2
 
                 reward_sum += reward  # 累积折扣奖励
 
-                self.perceive(state, action, r, next_state, done)  # 经验回放技术，训练
+                self.perceive(state, action, reward, next_state, done)  # 经验回放技术，训练
                 state = next_state  # 更新状态
                 if (self.learnStepCounter + 1) % self.targetReplaceIter == 0:  # 目标Q网络参数更新
                     self.Q_network_t.load_state_dict(
