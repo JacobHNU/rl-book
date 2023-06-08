@@ -1,3 +1,4 @@
+'''
 ## 1、上一章的bellman期望方程和最优方程转化为标准形式用 sympy.Matrix来求还是可以较好理解，但是可以看出直接求解有点复杂。
 ## 2、最优策略
 # actions = np.ones(env.shape, dtype=int)
@@ -7,8 +8,8 @@
 # optimal_policy = np.eye(4)[actions.reshape(-1)]  # np.eye(4)[actions.reshape(-1)]形成one-hot编码  # reshape(-1) 将数组变为1行
 # print('optimal_policy={}'.format(optimal_policy))  # 最终使得48个格子中选择的动作是都是最优的
 ## 最优策略的设置就是将每个格子（状态）对应的动作赋予最优的动作，使得可以最短最快到达终点。
-
-# ch3
+'''
+# ch3-DP
 # Bellman算子是压缩映射，因此可以用Banach不动点定理迭代求解Bellman方程。（不懂）
 # 有模型策略迭代，即在给定的动力系统矩阵p（这就是模型）
 
