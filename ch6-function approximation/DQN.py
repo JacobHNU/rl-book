@@ -42,11 +42,11 @@ class NN(nn.Module):     #继承与torch的nn.module类
         self.flatten = nn.Flatten()    # 将输入拉直成向量
         # 定义Q网络
         self.linear_relu_stack = nn.Sequential(
-            nn.Linear(input_size, 50),     # 输入层到第1隐藏层的线性部分
+            nn.Linear(input_size, 20),     # 输入层到第1隐藏层的线性部分
             nn.ReLU(),                     # 第1隐藏层激活函数
-            nn.Linear(50, 50),             # 第1隐藏层到第2隐藏层的线性部分
+            nn.Linear(20, 20),             # 第1隐藏层到第2隐藏层的线性部分
             nn.ReLU(),                     # 第2隐藏层激活函数
-            nn.Linear(50, output_size)     # 第2隐藏层到输出层
+            nn.Linear(20, output_size)     # 第2隐藏层到输出层
             )
 
     def forward(self,x):              # 前向传播函数
