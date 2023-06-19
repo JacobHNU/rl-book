@@ -8,8 +8,6 @@
 
 '''
 
-
-
 import math
 import numpy as np
 from gym import spaces
@@ -158,10 +156,4 @@ if __name__ == '__main__':
 
             if done:
                 break
-
-
-
-
-
-
 
